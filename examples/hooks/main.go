@@ -49,7 +49,7 @@ func main() {
 	}()
 
 	// Demonstration of directly publishing messages to a topic via the
-	// `server.Publish` method. Subscribe to `direct/publish` using your
+	// `server.Publish` method. Subscribe to `direct/publish/greenhouse` using your
 	// MQTT client to see the messages.
 	go func() {
 		cl := server.NewClient(nil, "local", "inline", true)
@@ -58,13 +58,13 @@ func main() {
 				FixedHeader: packets.FixedHeader{
 					Type: packets.Publish,
 				},
-				TopicName: "direct/publish",
+				TopicName: "direct/publish/greenhouse",
 				Payload:   []byte("injected scheduled message"),
 			})
 			if err != nil {
 				server.Log.Error().Err(err).Msg("server.InjectPacket")
 			}
-			server.Log.Info().Msgf("main.go injected packet to direct/publish")
+			server.Log.Info().Msgf("main.go injected packet to direct/publish/greenhouse")
 		}
 	}()
 
@@ -72,11 +72,11 @@ func main() {
 	// publish packets if you are not concerned with creating your own packets.
 	go func() {
 		for range time.Tick(time.Second * 5) {
-			err := server.Publish("direct/publish", []byte("packet scheduled message"), false, 0)
+			//err := server.Publish("direct/publish/greenhouse", []byte("packet scheduled message"), false, 0)
 			if err != nil {
 				server.Log.Error().Err(err).Msg("server.Publish")
 			}
-			server.Log.Info().Msgf("main.go issued direct message to direct/publish")
+			server.Log.Info().Msgf("main.go issued direct message to direct/publish/greenhouse")
 		}
 	}()
 
